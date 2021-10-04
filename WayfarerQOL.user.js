@@ -12,7 +12,7 @@
 // -- span.mat-content = text inside
 // document.querySelectorAll("app-review-rejection-abuse-modal mat-accordion mat-expansion-panel .mat-expansion-panel-content")[0].querySelectorAll("mat-selection-list mat-list-option")[2].click()
 
-(function() {
+(function () {
     'use strict';
 
     const elemId = "waifoo49";
@@ -26,13 +26,14 @@
     let elem = document.getElementById(elemId);
 
     let maps = [
-      {"title":"UT","url":"https://ut.no/kart#17/%lat%/%lng%"},
-      {"title":"Norgeskart","url":"https://spoox.org/lat-lng-utm.html?lat=%lat%1&lng=%lng%&zone=33&url=https%3A//norgeskart.no/%23%21%3Fproject%3Dseeiendom%26layers%3D1002%2C1014%26zoom%3D17%26lat%3D%25northingFull%25%26lon%3D%25eastingFull%25%26sok%3D%title%%26markerLat%3D%25northingFull%25%26markerLon%3D%25eastingFull%25%26panel%3DsearchOptionsPanel"},
-      {"title":"Norge i bilder","url":"https://spoox.org/lat-lng-utm.html?lat=%lat%&lng=%lng%&url=https%3A//norgeibilder.no/%3Fx%3D%25easting%25%26y%3D%25northing%25%26level%3D16%26utm%3D%25zoneNum%25"},
-      //  {"title":"Kulturminnesøk","url":"https://www.kulturminnesok.no/search?lat=%lat%&lng=%lng%"},
-      {"title":"Kommunekart","url":"https://www.kommunekart.com/?funksjon=Vispunkt&x=%lat%&y=%lng%&zoom=17&markering=1"},
-      {"title":"Finn","url":"https://kart.finn.no/?lng=%lng%&lat=%lat%&zoom=17&mapType=normap&markers=%lng%,%lat%,r,"},
-      {"title":"OSM", "url":"https://www.openstreetmap.org/#map=18/%lat%/%lng%"}
+        { "title": "UT", "url": "https://ut.no/kart#17/%lat%/%lng%" },
+        { "title": "Norgeskart", "url": "https://spoox.org/lat-lng-utm.html?lat=%lat%1&lng=%lng%&zone=33&url=https%3A//norgeskart.no/%23%21%3Fproject%3Dseeiendom%26layers%3D1002%2C1014%26zoom%3D17%26lat%3D%25northingFull%25%26lon%3D%25eastingFull%25%26sok%3D%title%%26markerLat%3D%25northingFull%25%26markerLon%3D%25eastingFull%25%26panel%3DsearchOptionsPanel" },
+        { "title": "Norge i bilder", "url": "https://spoox.org/lat-lng-utm.html?lat=%lat%&lng=%lng%&url=https%3A//norgeibilder.no/%3Fx%3D%25easting%25%26y%3D%25northing%25%26level%3D16%26utm%3D%25zoneNum%25" },
+        //  {"title":"Kulturminnesøk","url":"https://www.kulturminnesok.no/search?lat=%lat%&lng=%lng%"},
+        { "title": "Kommunekart", "url": "https://www.kommunekart.com/?funksjon=Vispunkt&x=%lat%&y=%lng%&zoom=17&markering=1" },
+        { "title": "Finn", "url": "https://kart.finn.no/?lng=%lng%&lat=%lat%&zoom=17&mapType=normap&markers=%lng%,%lat%,r," },
+        { "title": "OSM", "url": "https://www.openstreetmap.org/#map=18/%lat%/%lng%" },
+        { "title": "Intel", "url": "https://intel.ingress.com/?ll=%lat%,%lng%&pll=%lat%,%lng%" },
     ]
     maps.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
 
@@ -62,8 +63,8 @@
                         //console.log("attempt to patch rating", step);
                         patchRating(step.sel, index);
                     } else if (step.type == "dupes") {
-                      // patch in links to maps
-                      patchDupes(step.sel, index);
+                        // patch in links to maps
+                        patchDupes(step.sel, index);
                     }
                 });
             } else {
@@ -90,25 +91,25 @@
     }
 
     function patchDupes(sel, index) {
-      let headerEl = document.querySelector(`${sel} wf-review-card .wf-review-card__header div`);
-      if (headerEl) {
-        if (!headerEl.getAttribute("__FOO")) {
-          headerEl.setAttribute("__FOO", "__BAR");
-          let div = document.createElement("div");
-          maps.forEach((map, i) => {
-            if (i) {
-              div.appendChild(document.createTextNode(" | "));
+        let headerEl = document.querySelector(`${sel} wf-review-card .wf-review-card__header div`);
+        if (headerEl) {
+            if (!headerEl.getAttribute("__FOO")) {
+                headerEl.setAttribute("__FOO", "__BAR");
+                let div = document.createElement("div");
+                maps.forEach((map, i) => {
+                    if (i) {
+                        div.appendChild(document.createTextNode(" | "));
+                    }
+                    let a = document.createElement("a");
+                    let url = map.url.replace(/%lat%/g, review.result.lat).replace(/%lng%/g, review.result.lng);
+                    a.href = url;
+                    a.target = "_blank";
+                    a.appendChild(document.createTextNode(map.title));
+                    div.appendChild(a);
+                })
+                headerEl.appendChild(div);
             }
-            let a = document.createElement("a");
-            let url = map.url.replace(/%lat%/g, review.result.lat).replace(/%lng%/g, review.result.lng);
-            a.href = url;
-            a.target = "_blank";
-            a.appendChild(document.createTextNode(map.title));
-            div.appendChild(a);
-          })
-          headerEl.appendChild(div);
         }
-      }
     }
 
     function patchRating(sel, index) {
@@ -116,7 +117,7 @@
         let starEls = document.querySelectorAll(`${sel} wf-rate ul li`);
         if (starsEl && starEls) {
             if (!starsEl.getAttribute("__FOO")) {
-                starsEl.addEventListener("click", function() {
+                starsEl.addEventListener("click", function () {
                     clickedStep(index);
                 });
                 reviewSteps[index].rating = { starsEl, starEls };
@@ -166,7 +167,7 @@
         if (review && review.result && review.result.type == "NEW") {
             let step = reviewSteps[reviewStep];
             if (step && step.type == "rate" && step.rating) {
-                console.log("### click star number: " + (rating+1));
+                console.log("### click star number: " + (rating + 1));
                 //suppressNextClick = true;
                 step.rating.starEls[rating].click();
                 gotoNextStep();
@@ -224,7 +225,7 @@
             let exp = Math.floor((review.result.expires - Date.now()) / 1000);
             let expMin = Math.floor(exp / 60);
             let expSec = exp % 60;
-            let expText = (expMin+100).toString().substr(-2) + ':' + (expSec+100).toString().substr(-2);
+            let expText = (expMin + 100).toString().substr(-2) + ':' + (expSec + 100).toString().substr(-2);
             html += `${review.result.type} - <span style="font-size: 1.2em; font-weight: bold">${expText}</span>`;
         }
         elem.innerHTML = html;
@@ -238,7 +239,7 @@
 
     }
 
-    let iv = setInterval(function() {
+    let iv = setInterval(function () {
         patch();
         if (review) {
             update();
@@ -249,9 +250,9 @@
 
     let xhrOpen = XMLHttpRequest.prototype.open;
 
-    XMLHttpRequest.prototype.open = function() {
+    XMLHttpRequest.prototype.open = function () {
         console.log("#### OPEN", { method: arguments[0], url: arguments[1] });
-        this.addEventListener("readystatechange", function() {
+        this.addEventListener("readystatechange", function () {
             if (this.readyState == 4) {
                 console.log("#### RESPONSE", { url: this.responseURL, status: this.status, text: this.responseText });
                 if (this.status == 200 && this.responseURL.endsWith("https://wayfarer.nianticlabs.com/api/v1/vault/review")) {
