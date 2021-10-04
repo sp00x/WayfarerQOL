@@ -21,6 +21,17 @@
 
     let elem = document.getElementById(elemId);
 
+    let maps = [
+      {"title":"UT","url":"https://ut.no/kart#17/%lat%/%lng%"},
+      {"title":"Norgeskart","url":"https://spoox.org/lat-lng-utm.html?lat=%lat%1&lng=%lng%&zone=33&url=https%3A//norgeskart.no/%23%21%3Fproject%3Dseeiendom%26layers%3D1002%2C1014%26zoom%3D17%26lat%3D%25northingFull%25%26lon%3D%25eastingFull%25%26sok%3D%title%%26markerLat%3D%25northingFull%25%26markerLon%3D%25eastingFull%25%26panel%3DsearchOptionsPanel"},
+      {"title":"Norge i bilder","url":"https://spoox.org/lat-lng-utm.html?lat=%lat%&lng=%lng%&url=https%3A//norgeibilder.no/%3Fx%3D%25easting%25%26y%3D%25northing%25%26level%3D16%26utm%3D%25zoneNum%25"},
+      //  {"title":"Kulturminnesøk","url":"https://www.kulturminnesok.no/search?lat=%lat%&lng=%lng%"},
+      {"title":"Kommunekart","url":"https://www.kommunekart.com/?funksjon=Vispunkt&x=%lat%&y=%lng%&zoom=17&markering=1"},
+      {"title":"Finn","url":"https://kart.finn.no/?lng=%lng%&lat=%lat%&zoom=17&mapType=normap&markers=%lng%,%lat%,r,"},
+      {"title":"OSM", "url":"https://www.openstreetmap.org/#map=18/%lat%/%lng%"}
+    ]
+    maps.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+
     let reviewSteps = [
         { sel: "app-should-be-wayspot", type: "rate" },
         { sel: "app-title-and-description", type: "rate" },
@@ -30,6 +41,7 @@
         { sel: "app-visually-unique", type: "rate" },
         { sel: "app-safe-access", type: "rate" },
         { sel: "app-location-accuracy", type: "rate" },
+        { sel: "app-location-accuracy", type: "dupes" },
         { sel: "app-review-categorization", type: "category" },
         { sel: "app-review-comments" }
     ];
@@ -74,11 +86,25 @@
     }
 
     function patchDupes(sel, index) {
-      let headerEl = document.querySelector(`${sel} wf-review-card wf-review-card__header div`);
+      let headerEl = document.querySelector(`${sel} wf-review-card .wf-review-card__header div`);
       if (headerEl) {
-        // adds links to maps here..
+        if (!headerEl.getAttribute("__FOO")) {
+          headerEl.setAttribute("__FOO", "__BAR");
+          let div = document.createElement("div");
+          maps.forEach((map, i) => {
+            if (i) {
+              div.appendChild(document.createTextNode(" | "));
+            }
+            let a = document.createElement("a");
+            let url = map.url.replace(/%lat%/g, review.result.lat).replace(/%lng%/g, review.result.lng);
+            a.href = url;
+            a.target = "_blank";
+            a.appendChild(document.createTextNode(map.title));
+            div.appendChild(a);
+          })
+          headerEl.appendChild(div);
+        }
       }
-
     }
 
     function patchRating(sel, index) {
