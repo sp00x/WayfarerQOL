@@ -34,6 +34,7 @@
         { "title": "Finn", "url": "https://kart.finn.no/?lng=%lng%&lat=%lat%&zoom=17&mapType=normap&markers=%lng%,%lat%,r," },
         { "title": "OSM", "url": "https://www.openstreetmap.org/#map=18/%lat%/%lng%" },
         { "title": "Intel", "url": "https://intel.ingress.com/?ll=%lat%,%lng%&pll=%lat%,%lng%" },
+        { "title": "Gule Sider", "url": "https://kart.gulesider.no/?c=%lat%,%lng%&z=18&l=aerial&g=%lat%,%lng%" } // bilde2910 <3
     ]
     maps.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
 
