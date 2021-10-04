@@ -8,6 +8,10 @@
 // @grant        none
 // ==/UserScript==
 
+// document.querySelectorAll("app-review-rejection-abuse-modal mat-accordion mat-expansion-panel mat-expansion-panel-header")[0].click()
+// -- span.mat-content = text inside
+// document.querySelectorAll("app-review-rejection-abuse-modal mat-accordion mat-expansion-panel .mat-expansion-panel-content")[0].querySelectorAll("mat-selection-list mat-list-option")[2].click()
+
 (function() {
     'use strict';
 
